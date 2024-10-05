@@ -30,7 +30,7 @@ export default function SignUp() {
       }
       setLoading(false);
       setError(null) // if everthing is fine then we clear the error 
-      navigate('')
+      navigate('/sign-in')
       console.log(data);
     } catch (error) {
       setLoading(false)
