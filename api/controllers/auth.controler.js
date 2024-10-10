@@ -23,9 +23,27 @@ export const signin = async (req, res, next) => {
         const validPassoword = bcryptjs.compareSync(password, validUser.password);
         if (!validPassoword) return next(errorHandler(401, 'wrong credentials'));
         const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
-        const {password: pass, ...rest} = validUser._doc; // as we don't want to return the password while getting the login details its not a good practice
+        const { password: pass, ...rest } = validUser._doc; // as we don't want to return the password while getting the login details its not a good practice || or dont wanna save the password
         res.cookie('access_token', token, { httpOnly: true }).status(200).json(rest);
     } catch (error) {
         next(error);
     }
-}; 
+};
+
+export const google = async (req, res, next) => {
+    try {
+        const user = await User.findOne({ email: req.body.email });
+        if (user) {
+            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+            const { password: pass, ...rest } = user._doc;
+            res.cookie('access_token', token, { httpOnly: true }).status(200).json(rest);
+        } else {
+            const generatePassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            const hashedpassword = bcryptjs.hashSync(generatePassword, 10);
+            
+        }
+
+    } catch (error) {
+
+    }
+};
