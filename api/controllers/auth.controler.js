@@ -43,8 +43,8 @@ export const google = async (req, res, next) => {
             const newUser = new User({ username: req.body.name.split(' ').join('').toLowerCase() + Math.random().toString(36).slice(-4), email: req.body.email, password: hashedpassword, avatar: req.body.photo, 
             });
             await newUser.save();
-            // console.log(req.body.photo);
-            // console.log(newUser);
+            console.log(req.body.photo);
+            console.log(newUser);
             
             const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
             const { password: pass, ...rest } = newUser._doc;
