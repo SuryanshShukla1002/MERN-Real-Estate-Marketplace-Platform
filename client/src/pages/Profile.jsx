@@ -16,9 +16,9 @@ export default function Profile() {
   const [filePercentage, setFilePercentage] = useState(0);
   const [formData, setFormData] = useState({});
   // console.log(file);
-  console.log(formData);
-  console.log(filePercentage);
-  console.log(fileUploadError);
+  // console.log(formData);
+  // console.log(filePercentage);
+  // console.log(fileUploadError);
 
   useEffect(() => {
     if (file) {
@@ -66,6 +66,17 @@ export default function Profile() {
           alt="profile"
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
         />
+        <p>
+          {fileUploadError ? (
+            <span className="text-red-700">Error Image upload</span>
+          ) : filePercentage > 0 && filePercentage < 100 ? (
+            <span className="text-slate-700">{`Uploading ${filePercentage}%`}</span>
+          ) : filePercentage === 100 ? (
+            <span>Image succesfully uploaded</span>
+          ) : (
+            ""
+          )}
+        </p>
         <input
           type="text"
           id="username"
