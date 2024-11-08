@@ -4,6 +4,10 @@ import {app} from '../firebase'
 
 export default function CreateListing() {
   const [files, setFiles] = useState([]);
+  const [formData, setFormData] = useState({
+    imageUrls: []
+  })
+  console.log(formData);
   // console.log(files);
   const handleImageSubmit = (e) => {
     if (files.length > 0 && files.length < 7) {
@@ -12,6 +16,9 @@ export default function CreateListing() {
       for(let i = 0; i < files.length; i ++){
         promises.push(storeImage(files[i]))
       }
+      Promise.all(promises).then((urls) => {
+        setFormData({...formData , imageUrls: formData.imageUrls.concat(urls)})
+      });
     }
   }
   const storeImage = async (file) => {
@@ -22,6 +29,10 @@ export default function CreateListing() {
       const uploadTask = uploadBytesResumable(storageRef , file)
       uploadTask.on(
         "state_changed",
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(`Upload is ${progress}% done`);
+        },
            (error) => {
             reject(error)
            },
