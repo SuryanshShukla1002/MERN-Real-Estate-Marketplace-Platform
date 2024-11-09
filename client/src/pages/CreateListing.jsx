@@ -13,10 +13,13 @@ export default function CreateListing() {
     imageUrls: [],
   });
   const [imageUploadError, setImageUploadError] = useState(false);
+  const [uploading, setUploading] = useState(false);
   // console.log(formData);
   // console.log(files);
   const handleImageSubmit = (e) => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
+      setUploading(true);
+      setImageUploadError(false);
       const promises = [];
 
       for (let i = 0; i < files.length; i++) {
@@ -29,12 +32,15 @@ export default function CreateListing() {
             imageUrls: formData.imageUrls.concat(urls),
           });
           setImageUploadError(false);
+          setUploading(false);
         })
         .catch((err) => {
           setImageUploadError("Image upload failed(2mb max per image");
+          setUploading(false);
         });
     } else {
       setImageUploadError("You can only upload 6 images per listing");
+      setUploading(false);
     }
   };
   const storeImage = async (file) => {
@@ -191,10 +197,11 @@ export default function CreateListing() {
             />
             <button
               type="button"
+              disabled={uploading}
               onClick={handleImageSubmit}
               className="p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80"
             >
-              Upload
+              {uploading ? "Uploading..." : "Upload"}
             </button>
           </div>
           <p className="text-red-700">{imageUploadError && imageUploadError}</p>
