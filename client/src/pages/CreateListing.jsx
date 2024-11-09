@@ -13,7 +13,7 @@ export default function CreateListing() {
     imageUrls: [],
   });
   const [imageUploadError, setImageUploadError] = useState(false);
-  console.log(formData);
+  // console.log(formData);
   // console.log(files);
   const handleImageSubmit = (e) => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -59,6 +59,13 @@ export default function CreateListing() {
           });
         }
       );
+    });
+  };
+
+  const handleRemoveImage = (index) => {
+    setFormData({
+      ...formData,
+      imageUrls: formData.imageUrls.filter((_, i) => i !== index),
     });
   };
   return (
@@ -192,14 +199,21 @@ export default function CreateListing() {
           </div>
           <p className="text-red-700">{imageUploadError && imageUploadError}</p>
           {formData.imageUrls.length > 0 &&
-            formData.imageUrls.map((url) => (
-              <div className="flex justify-between p-3 border items-center">
+            formData.imageUrls.map((url, index) => (
+              <div
+                key={url}
+                className="flex justify-between p-3 border items-center"
+              >
                 <img
                   src={url}
                   alt="listing image"
                   className="w-20 h-20 object-contain rounded-lg"
                 />
-                <button className="p-3 text-red-700 rounded-lg uppercase hover:opacity-95">
+                <button
+                  type="button"
+                  onClick={() => handleRemoveImage(index)}
+                  className="p-3 text-red-700 rounded-lg uppercase hover:opacity-95"
+                >
                   Delete
                 </button>
               </div>
