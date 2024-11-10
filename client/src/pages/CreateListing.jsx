@@ -86,17 +86,31 @@ export default function CreateListing() {
     });
   };
   const handleChange = (e) => {
-    if(e.target.id === 'sale' || e.target.id === 'rent'){
+    if (e.target.id === "sale" || e.target.id === "rent") {
       setFormData({
         ...formData,
-        type: e.target.id
-      })
+        type: e.target.id,
+      });
+    } // it is because different checkboxes has different functionalities so for that two if condition are handled seperatly
+    if (
+      e.target.id === "parking" ||
+      e.target.id === "furnished" ||
+      e.target.id === "offer"
+    ) {
+      setFormData({
+        ...formData,
+        [e.target.id]: e.target.checked,
+      });
     }
-    if(e.target.id === 'parking' || e.target.id === 'furnished' || e.target.id === 'offer'){
+    if (
+      e.target.type === "number" ||
+      e.target.type === "text" ||
+      e.target.type === "textarea"
+    ) {
       setFormData({
-        ...formData,
-        [e.target.id]: e.target.checked
-      })
+        ...formData, // reaso behind breacket is we want only the name of e.target.id
+        [e.target.id]: e.target.value,
+      });
     }
   };
   return (
@@ -118,10 +132,10 @@ export default function CreateListing() {
             value={formData.name}
           />
           <textarea
-            type="text"
+            type="description"
             placeholder="Description"
             className="border p-3 rounded-lg"
-            id="Description"
+            id="description"
             required
             onChange={handleChange}
             value={formData.description}
@@ -234,8 +248,8 @@ export default function CreateListing() {
               <input
                 type="number"
                 id="discountPrice"
-                min="1"
-                max="10"
+                min="20"
+                max="100"
                 required
                 className="p-3 border border-gray-300 rounded-lg"
                 onChange={handleChange}
