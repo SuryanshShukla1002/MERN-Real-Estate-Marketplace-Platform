@@ -25,7 +25,7 @@ export default function CreateListing() {
   });
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
-  // console.log(formData);
+  console.log(formData);
   // console.log(files);
   const handleImageSubmit = (e) => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -85,7 +85,20 @@ export default function CreateListing() {
       imageUrls: formData.imageUrls.filter((_, i) => i !== index),
     });
   };
-  const handleChange = (e) => {};
+  const handleChange = (e) => {
+    if(e.target.id === 'sale' || e.target.id === 'rent'){
+      setFormData({
+        ...formData,
+        type: e.target.id
+      })
+    }
+    if(e.target.id === 'parking' || e.target.id === 'furnished' || e.target.id === 'offer'){
+      setFormData({
+        ...formData,
+        [e.target.id]: e.target.checked
+      })
+    }
+  };
   return (
     <main className="p-3 max-w-4xl mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">
