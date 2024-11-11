@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   getDownloadURL,
   getStorage,
@@ -6,9 +6,12 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+import { useSelector } from "react-redux";
 
 export default function CreateListing() {
+  const { currentUser } = useSelector((state) => state.user);
   const [files, setFiles] = useState([]);
+
   const [formData, setFormData] = useState({
     imageUrls: [],
     name: "", // if here is added that will be static
@@ -25,6 +28,8 @@ export default function CreateListing() {
   });
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState(false);
+  const [loading, setloading] = useState(false);
   console.log(formData);
   // console.log(files);
   const handleImageSubmit = (e) => {
@@ -113,12 +118,44 @@ export default function CreateListing() {
       });
     }
   };
+  const handleSubmitForm = async (e) => {
+    e.preventDefault();
+    try {
+      if (formData.imageUrls.length < 1)
+        return setError("you must upload at least one image");
+      if (formData.regularPrice < formData.discountPrice)
+        return setError("Discount prince must be lower than the regular price");
+      setloading(true);
+      setError(false);
+      const res = await fetch("/api/listing/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          userRef: currentUser._id,
+        }),
+      });
+      const data = await res.json();
+      setloading(false);
+      if (data.success === false) {
+        setError(data.message);
+      }
+    } catch (error) {
+      setError(error.message);
+      setloading(true);
+    }
+  };
   return (
     <main className="p-3 max-w-4xl mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">
         Create a Listing
       </h1>
-      <form className="flex flex-col sm:flex-row gap-4">
+      <form
+        onSubmit={handleSubmitForm}
+        className="flex flex-col sm:flex-row gap-4"
+      >
         <div className="flex flex-col gap-4 flex-1 ">
           <input
             type="text"
@@ -233,7 +270,7 @@ export default function CreateListing() {
                 type="number"
                 id="regularPrice"
                 min="50"
-                max="10000"
+                max="100000"
                 required
                 className="p-3 border border-gray-300 rounded-lg"
                 onChange={handleChange}
@@ -248,8 +285,8 @@ export default function CreateListing() {
               <input
                 type="number"
                 id="discountPrice"
-                min="20"
-                max="100"
+                min="50"
+                max="100000"
                 required
                 className="p-3 border border-gray-300 rounded-lg"
                 onChange={handleChange}
@@ -309,8 +346,9 @@ export default function CreateListing() {
               </div>
             ))}
           <button className="p-3 text-white bg-slate-700 rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
-            Create Listing
+            {loading ? "Creating" : "Create listing"}
           </button>
+          {error && <p className="text-red-700 text-sm">{error}</p>}
         </div>
       </form>
     </main>
