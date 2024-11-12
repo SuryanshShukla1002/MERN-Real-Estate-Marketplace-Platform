@@ -40,3 +40,15 @@ export const deleteUser = async (req, res, next) => {
         next(error);
     }
 };
+
+export const getUserListings = (req, res, next) => {
+    if (req.user.id != req.params.id) {
+        try {
+
+        } catch (error) {
+            next(error);
+        }
+    } else {
+        return next(errorHandler(401, 'You can only view your own listings!'));
+    }
+};
