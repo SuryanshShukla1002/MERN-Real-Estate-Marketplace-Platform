@@ -29,6 +29,7 @@ export default function Profile() {
   const [filePercentage, setFilePercentage] = useState(0);
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [shwoListingError, setShwoListingError] = useState(false);
   const dispatch = useDispatch();
   // console.log(file);
   // console.log(formData);
@@ -119,6 +120,20 @@ export default function Profile() {
       dispatch(signOutUserFailure(data.message));
     }
   };
+
+  const handleShowListings = async () => {
+    try {
+      setShwoListingError(false);
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const data = await res.json();
+      if (data.success === false) {
+        setShwoListingError(true);
+        return;
+      }
+    } catch (error) {
+      setShwoListingError(true);
+    }
+  };
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -200,6 +215,12 @@ export default function Profile() {
       {/* will generate unauthorized if we delete the cookie as we are not siged in */}
       <p className="text-green-700 mt-5">
         {updateSuccess ? "User is updated successfully!" : ""}
+      </p>
+      <button onClick={handleShowListings} className="text-green-700 w-full">
+        Show Listings
+      </button>
+      <p className="text-red-700 mt-5">
+        {shwoListingError ? "Error showing listings" : ""}
       </p>
     </div>
   );
