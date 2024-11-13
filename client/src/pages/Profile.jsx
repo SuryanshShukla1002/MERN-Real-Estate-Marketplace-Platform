@@ -30,6 +30,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [shwoListingError, setShwoListingError] = useState(false);
+  const [userListings, setUserListings] = useState([]);
   const dispatch = useDispatch();
   // console.log(file);
   // console.log(formData);
@@ -120,7 +121,7 @@ export default function Profile() {
       dispatch(signOutUserFailure(data.message));
     }
   };
-
+  // for user show listing
   const handleShowListings = async () => {
     try {
       setShwoListingError(false);
@@ -130,6 +131,7 @@ export default function Profile() {
         setShwoListingError(true);
         return;
       }
+      setUserListings(data);
     } catch (error) {
       setShwoListingError(true);
     }
@@ -222,6 +224,35 @@ export default function Profile() {
       <p className="text-red-700 mt-5">
         {shwoListingError ? "Error showing listings" : ""}
       </p>
+
+      {userListings && userListings.length > 0 && (
+        <div>
+          {userListings.map((listing) => (
+            <div
+              key={listing._id}
+              className="border rounded-lg p-3 flex justify-between items-center gap-4"
+            >
+              <Link to={`/listing/${listing._id}`}>
+                <img
+                  className="h-16 w-16 object-contain"
+                  src={listing.imageUrls[0]}
+                  alt="listing image"
+                />
+              </Link>
+              <Link
+                className="text-slate-700 font-semibold flex-1 hover:underline truncate"
+                to={`/listing/${listing._id}`}
+              >
+                <p>{listing.name}</p>
+              </Link>
+              <div className="flex flex-col items-center">
+                <button className="text-red-700 uppercase">Delete</button>
+                <button className="text-green-700 uppercase">Edit</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
