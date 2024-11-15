@@ -38,7 +38,7 @@ export default function CreateListing() {
     const fetchListing = async () => {
       const listingId = params.listingId;
       // console.log(listingId);
-      const res = await fetch(`/api/listing/${listingId}`);
+      const res = await fetch(`/api/listing/get/${listingId}`);
       const data = await res.json();
       if (data.success === false) {
         console.log(data.message);
@@ -143,7 +143,7 @@ export default function CreateListing() {
         return setError("Discount prince must be lower than the regular price");
       setloading(true);
       setError(false);
-      const res = await fetch("/api/listing/create", {
+      const res = await fetch(`/api/listing/update/${params.listingId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
