@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
-import { FaShare } from "react-icons/fa";
+import { FaMapMarkerAlt, FaShare } from "react-icons/fa";
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
@@ -61,16 +61,29 @@ export default function Listing() {
               onClick={() => {
                 navigator.clipboard.writeText(window.location.href); // to copy the url
                 setCopied(true);
+                setTimeout(() => {
+                  setCopied(false);
+                }, 2000);
               }}
             />
           </div>
-          {copied &&
-            setTimeout(() => {
-              setCopied(false);
-            }, 2000)}
-          <p className="fixed top-[23%] right-[5%] z-10 rounded-md bg-slate-400 p-2 text-white">
-            Link copied
-          </p>
+          {copied && (
+            <p className="fixed top-[23%] right-[5%] z-10 rounded-md bg-slate-400 p-2 text-white">
+              Link copied
+            </p>
+          )}
+          <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-6 text-2xl font-semibold">
+            <p>
+              {listing.name} - ${" "}
+              {listing.offer
+                ? listing.discountPrice.toLocaleString("en-US")
+                : listing.regularPrice.toLocaleString("en-US")}
+              {listing.type === "rent" && " / month"}
+            </p>
+            <p className="flex items-center mt-6 gap-2 text-slate-600 my-2 text-sm">
+              <FaMapMarkerAlt className="text-green-700" />
+            </p>
+          </div>
         </>
       )}
     </main>
