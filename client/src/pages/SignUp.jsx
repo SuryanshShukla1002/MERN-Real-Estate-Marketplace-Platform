@@ -30,7 +30,7 @@ export default function SignUp() {
         setLoading(false);
         setError(data.message);
         return;
-      }
+      } // if no then below
       setLoading(false);
       setError(null); // if everthing is fine then we clear the error
       navigate("/sign-in"); //if no error naviage to sign in
