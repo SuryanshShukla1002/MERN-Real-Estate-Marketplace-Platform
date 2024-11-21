@@ -42,6 +42,44 @@ export const updateListing = async (req, res, next) => {
             req.body,
             { new: true } // if this not done you won't get the latest updated listing 
         );
+        res.status(200).json(updateListing);
+    } catch (error) {
+        next(error);
+    }
+};
+export const getListing = async (req, res, next) => {
+    try {
+        const listing = await Listing.findById(req.params.id);
+        if (!listing) {
+            return next(errorHandler(404, "Listing not found"));
+        }
+        res.status(200).json(listing);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getListings = async (req, res, next) => {
+    try {
+        const limit = parseInt(req.query.limit) || 9;
+        const startIndex = parseInt(req.query.startIndex) || 0;
+        let offer = req.query.offer;
+        if (offer === 'undefined' || offer === 'false') {
+            offer = { $in: [false, true] };
+        }
+
+        let furnished = req.query.furnished;
+
+        if (furnished === 'undefined' || furnished === 'false') {
+            furnished = { $in: [false, true] };
+        }
+
+        let parking = req.query.parking;
+
+        if (parking === 'undefined' || parking === 'false') {
+            parking = { $in: [false, true] };
+        }
+
     } catch (error) {
         next(error);
     }
