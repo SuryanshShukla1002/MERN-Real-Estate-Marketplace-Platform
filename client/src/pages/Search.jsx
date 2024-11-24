@@ -15,6 +15,9 @@ export default function Search() {
     if(e.target.id === 'all' || e.target.id === 'rent' || e.target.id === 'sale') {
       setSidebardata({...sidebardata, type: e.target.id})
     }
+    if(e.target.id === 'searchTerm'){
+      setSidebardata({...setSidebardata, searchTerm: e.target.value})
+    } 
   };
   return (
     <div className="flex flex-col md:flex-row">
