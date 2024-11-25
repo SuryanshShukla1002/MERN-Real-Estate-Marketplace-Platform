@@ -13,6 +13,9 @@ export default function Search() {
     order: "desc",
   });
   // console.log(sidebardata);
+  const [loading, setLoading] = useState(false);
+  const [listings, setListings] = useState([]);
+  console.log(listings);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -43,7 +46,17 @@ export default function Search() {
         order: orderFromUrl || "desc",
       });
     }
-  });
+
+    const fetchListings = async () => {
+      setLoading(true);
+      const searchquery = urlParams.toString();
+      const res = await fetch(`/api/listing/get?${searchquery}`);
+      const data = await res.json();
+      setListings(data);
+      setLoading(false);
+    };
+    fetchListings();
+  }, [location.search]);
 
   const handleChange = (e) => {
     if (
