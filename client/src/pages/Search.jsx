@@ -219,9 +219,9 @@ export default function Search() {
           )}
           {!loading &&
             listings &&
-            listings.map((listing) => {
-              <ListingItem />;
-            })}
+            listings.map((listing) => (
+              <ListingItem key={listing._id} listing={listing} />
+            ))}
         </div>
       </div>
     </div>
