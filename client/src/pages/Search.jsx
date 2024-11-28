@@ -51,11 +51,14 @@ export default function Search() {
 
     const fetchListings = async () => {
       setLoading(true);
+      setShowMore(false);
       const searchquery = urlParams.toString();
       const res = await fetch(`/api/listing/get?${searchquery}`);
       const data = await res.json();
       if (data.length > 8) {
         setShowMore(true);
+      } else {
+        setShowMore(false);
       }
       setListings(data);
       setLoading(false);
@@ -118,6 +121,7 @@ export default function Search() {
     if (data.length < 9) {
       setShowMore(false);
     }
+    setListings([...listings, ...data]);
   };
   return (
     <div className="flex flex-col md:flex-row">
