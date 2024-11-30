@@ -89,14 +89,61 @@ export default function Home() {
       <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10">
         {offerListings && offerListings.length > 0 && (
           <div className="">
-            <div>
-              <h2>Recent offers</h2>
-              <Link to={"/search?offer=true"}>Show more offers</Link>
+            <div className="my-3">
+              <h2 className="text-2xl font-semibold text-slate-600">
+                Recent offers
+              </h2>
+              <Link
+                className="text-sm text-blue-900 hover:underline"
+                to={"/search?offer=true"}
+              >
+                Show more offers
+              </Link>
             </div>
-            <div>
-              {offerListings.map((listing) => {
-                <ListingItem listing={listing} key={listing._id} />;
-              })}
+            <div className="flex flex-wrap gap-4">
+              {offerListings.map((listing) => (
+                <ListingItem listing={listing} key={listing._id} />
+              ))}
+              {rentListings && rentListings.length > 0 && (
+                <div className="">
+                  <div className="my-3">
+                    <h2 className="text-2xl font-semibold text-slate-600">
+                      Recent Places for rent
+                    </h2>
+                    <Link
+                      className="text-sm text-blue-900 hover:underline"
+                      to={"/search?type=rent"}
+                    >
+                      Show more places for rent
+                    </Link>
+                  </div>
+                  <div className="flex flex-wrap gap-4">
+                    {rentListings.map((listing) => (
+                      <ListingItem listing={listing} key={listing._id} />
+                    ))}
+                  </div>
+                </div>
+              )}
+              {saleListing && saleListing.length > 0 && (
+                <div className="">
+                  <div className="my-3">
+                    <h2 className="text-2xl font-semibold text-slate-600">
+                      Recent places for sale
+                    </h2>
+                    <Link
+                      className="text-sm text-blue-900 hover:underline"
+                      to={"/search?type=sale"}
+                    >
+                      Show more places for sale
+                    </Link>
+                  </div>
+                  <div className="flex flex-wrap gap-4">
+                    {saleListing.map((listing) => (
+                      <ListingItem listing={listing} key={listing._id} />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
