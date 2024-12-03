@@ -17,7 +17,7 @@ export default function Home() {
   useEffect(() => {
     const fetchOfferListing = async () => {
       try {
-        const res = await fetch("/api/listing/get?offer=true&limit=4");
+        const res = await fetch("/api/listing/get?offer=true&limit=4"); // if request is success
         const data = await res.json();
         setOfferListings(data);
         fetchRentListing();
