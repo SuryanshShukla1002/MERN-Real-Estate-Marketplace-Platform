@@ -39,6 +39,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (file) {
+      // ensure file is selected
       handleFileUpload(file);
     }
   }, [file]);
